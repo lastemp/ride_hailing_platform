@@ -1,25 +1,25 @@
-//! RegisterInvestor instruction handler
+//! RegisterRider instruction handler
 
 use {
-    crate::{error::SolarCrowdFundingError, state::investor::Investor},
+    crate::{error::RideHailingPlatformError, state::rider::Rider},
     anchor_lang::prelude::*,
     //anchor_spl::token::{Token, TokenAccount},
     //solana_program::program_error::ProgramError,
 };
 
 #[derive(Accounts)]
-#[instruction(params: RegisterInvestorParams)]
-pub struct RegisterInvestor<'info> {
+#[instruction(params: RegisterRiderParams)]
+pub struct RegisterRider<'info> {
     // init means to create account
     // bump to use unique address for account
     #[account(
         init,
         payer = owner,
-        space = 8 + Investor::INIT_SPACE,
-        seeds = [b"investor", owner.key().as_ref()],
+        space = 8 + Rider::INIT_SPACE,
+        seeds = [b"rider", owner.key().as_ref()],
         bump
     )]
-    pub investor: Account<'info, Investor>,
+    pub rider: Account<'info, Rider>,
     // mut makes it changeble (mutable)
     #[account(mut)]
     pub owner: Signer<'info>,
@@ -27,9 +27,9 @@ pub struct RegisterInvestor<'info> {
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct RegisterInvestorParams {
+pub struct RegisterRiderParams {
     full_names: String, // full names i.e first name, middlename, surname
-    country: String,    // home country of tree owner
+    country: String,    // country of rider
 }
 
 // full names length
@@ -38,32 +38,29 @@ const FULL_NAMES_LENGTH: usize = 50;
 const COUNTRY_LENGTH: usize = 3;
 const COUNTRY_LENGTH_2: usize = 2;
 
-pub fn register_investor(
-    ctx: Context<RegisterInvestor>,
-    params: &RegisterInvestorParams,
-) -> Result<()> {
+pub fn register_rider(ctx: Context<RegisterRider>, params: &RegisterRiderParams) -> Result<()> {
     // validate inputs
     msg!("Validate inputs");
     if params.full_names.as_bytes().len() > 0
         && params.full_names.as_bytes().len() <= FULL_NAMES_LENGTH
     {
     } else {
-        return Err(SolarCrowdFundingError::InvalidFullNamesLength.into());
+        return Err(RideHailingPlatformError::InvalidFullNamesLength.into());
     }
 
     if params.country.as_bytes().len() != COUNTRY_LENGTH
         && params.country.as_bytes().len() != COUNTRY_LENGTH_2
     {
-        return Err(SolarCrowdFundingError::InvalidCountryLength.into());
+        return Err(RideHailingPlatformError::InvalidCountryLength.into());
     }
 
-    let investor = &mut ctx.accounts.investor;
+    let rider = &mut ctx.accounts.rider;
 
     // * - means dereferencing
-    investor.owner = *ctx.accounts.owner.key;
-    investor.full_names = params.full_names.to_string();
-    investor.country = params.country.to_string();
-    investor.active = true;
+    rider.owner = *ctx.accounts.owner.key;
+    rider.full_names = params.full_names.to_string();
+    rider.country = params.country.to_string();
+    rider.active = true;
 
     Ok(())
 }
