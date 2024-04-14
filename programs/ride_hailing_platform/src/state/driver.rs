@@ -9,4 +9,5 @@ pub struct Driver {
     #[max_len(3)]
     pub country: String, // home country of driver
     pub active: bool,  // status of driver
+    pub commission_earned: u32, // commission earned through completion of trips
 }

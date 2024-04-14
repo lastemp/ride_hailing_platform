@@ -28,4 +28,19 @@ pub mod ride_hailing_platform {
     ) -> Result<()> {
         instructions::register_driver(ctx, &params)
     }
+
+    pub fn request_trip(ctx: Context<RequestTrip>, params: RequestTripParams) -> Result<()> {
+        instructions::request_trip(ctx, &params)
+    }
+
+    pub fn pay_trip(ctx: Context<PayTrip>, params: PayTripParams) -> Result<()> {
+        instructions::pay_trip(ctx, &params)
+    }
+
+    pub fn withdraw_driver_funds(
+        ctx: Context<WithdrawDriverFunds>,
+        params: WithdrawDriverFundsParams,
+    ) -> Result<()> {
+        instructions::withdraw_funds(ctx, &params)
+    }
 }

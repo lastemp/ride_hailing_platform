@@ -8,10 +8,10 @@ Below are some features contained in the program:
 
 - Register rider
 - Register driver
-- Pay for ride
-- Earn fees for successful ride
-- Earn loyalty points
-- Rate driver (1-5 stars)
+- Request trip
+- Pay for trip
+- Earn fees(driver) for successful ride
+- Earn(rider) loyalty points
 
 ## Getting started
 
